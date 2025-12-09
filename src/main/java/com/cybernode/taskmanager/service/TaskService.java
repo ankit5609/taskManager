@@ -9,18 +9,35 @@ public class TaskService {
     Map<String,Task> taskDB=new HashMap<>();
 
     public Task createtask(Task task){
+        String id = taskDB.size() + 1 + ""; // String id = UUID.randomUUID().toString();  will yse thing after designing UI
+        task.setId(id);
         taskDB.put(task.getId(),task);
         return task;
     }
-    public String deleteTask(String id){
-        taskDB.remove(id);
-        return "Deleted Task with id "+id;
+    public boolean deleteTask(String id){
+        return taskDB.remove(id)!=null;
     }
-    public Task updateTask(Task task){
-        taskDB.put(task.getId(),task);
-        return task;
+
+    public Task updateTask(String id,Task updated){
+        Task temp=taskDB.get(id);
+        if(temp==null){
+            return null;
+        }
+        if(updated.getName()!=null){
+            temp.setName(updated.getName());
+        }
+        if(updated.getStatus()!=null){
+            temp.setStatus(updated.getStatus());
+        }
+        taskDB.put(id,temp);
+        return temp;
     }
+
     public Task getTask(String id){
         return taskDB.get(id);
+    }
+
+    public List<Task> getAllTask(){
+        return new ArrayList<>(taskDB.values());
     }
 }
